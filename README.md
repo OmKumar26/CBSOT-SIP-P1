@@ -1,84 +1,205 @@
-# Customer Churn Prediction and Customer Segmentation
+#  Customer Churn Prediction and Customer Segmentation
 
 ## About the Project
 
-This project started as an exercise to understand how machine learning can be used to solve a real business problem—customer churn. Along the way, I realized that predicting churn alone isn't enough. Businesses also need to understand *which* customers are leaving and *how* different customer groups behave.
+Customer churn is a major challenge for subscription-based businesses, where retaining existing customers is often more cost-effective than acquiring new ones. This project explores how machine learning can be used to identify customers who are likely to churn and how customer segmentation can provide additional business context for targeted retention strategies.
 
-To explore this, I built a churn prediction model using Random Forest and then segmented customers using K-Means clustering to identify groups with similar characteristics.
-
-This project helped me connect data analysis, machine learning, and business thinking into one workflow.
+Rather than stopping at building a predictive model, I wanted to understand **why customers leave**, evaluate different modeling approaches, and translate the results into actionable customer segments. This project combines **Exploratory Data Analysis (EDA), Machine Learning, and K-Means Clustering** into a complete end-to-end workflow.
 
 ---
 
-## Project Journey
+# 📂 Dataset Overview
 
-### 1. Understanding the Data
+| Attribute | Value |
+|-----------|------:|
+| Dataset | Telco Customer Churn |
+| Total Customers | **7,043** |
+| Features | **21** |
+| Target Variable | Churn (Yes / No) |
+| Problem Type | Binary Classification |
+| Customer Segments | **3 (K-Means)** |
 
-I began by exploring the dataset to answer questions like:
+---
 
-- Which customers are more likely to leave?
+#  Project Workflow
+
+```text
+Customer Data
+      │
+      ▼
+Exploratory Data Analysis
+      │
+      ▼
+Data Cleaning & Feature Engineering
+      │
+      ▼
+Random Forest Baseline Model
+      │
+      ▼
+Handling Class Imbalance
+      │
+      ▼
+Hyperparameter Tuning
+      │
+      ▼
+Model Evaluation
+      │
+      ▼
+Customer Segmentation (K-Means)
+      │
+      ▼
+Business Insights
+```
+
+---
+
+# 📈 Project Journey
+
+## 1. Understanding the Data
+
+Before building any models, I explored the dataset to understand customer behaviour and identify the factors contributing to churn.
+
+Some of the questions I investigated included:
+
+- Which customers are more likely to churn?
 - Does contract type affect churn?
-- How does tenure relate to customer loyalty?
-- Are customers with higher monthly charges more likely to churn?
+- How does customer tenure influence loyalty?
+- Are customers with higher monthly charges more likely to leave?
+- Does technical support improve retention?
 
-Using visualizations helped me identify patterns before building any models.
+### Key Findings
 
-**What I learned**
+| Question | Observation |
+|----------|-------------|
+| Which customers churn the most? | Customers on month-to-month contracts showed the highest churn rate. |
+| Does tenure matter? | Customers with shorter tenure were significantly more likely to churn. |
+| Monthly Charges | Higher monthly charges were associated with increased churn. |
+| Technical Support | Customers without technical support churned more frequently. |
+| Contract Type | Longer contracts resulted in much lower churn rates. |
 
-- How to perform meaningful exploratory data analysis
-- How visualization can reveal trends that summary statistics often miss
-- How to think about data from a business perspective instead of only a technical one
+### What I Learned
 
----
-
-### 2. Preparing the Data
-
-Before training a model, I cleaned and transformed the dataset by:
-
-- Handling missing values
-- Converting categorical variables into numerical features
-- Preparing feature and target variables
-- Splitting the data into training and testing sets
-
-This stage showed me that preprocessing has a major impact on model performance.
+- Used visualization to uncover customer behaviour and business trends.
+- Learned to approach the dataset from a business perspective before building models.
+- Understood how EDA guides feature selection and model development.
 
 ---
 
-### 3. Building the Churn Prediction Model
+## 2. Data Preparation
 
-I trained a Random Forest classifier to predict whether a customer would churn.
+To prepare the dataset for machine learning, I performed several preprocessing steps:
 
-Instead of stopping at accuracy, I also looked at:
+- Handled missing values
+- Converted categorical variables into numerical features
+- Encoded categorical variables
+- Prepared feature and target variables
+- Split the dataset into training and testing sets
 
-- Confusion Matrix
+### What I Learned
+
+This stage reinforced that model performance depends heavily on data quality. Careful preprocessing and feature engineering often have a greater impact than changing algorithms.
+
+---
+
+## 3. Building the Churn Prediction Model
+
+I developed a **Random Forest Classifier** to predict whether a customer would churn.
+
+Rather than evaluating the model using accuracy alone, I assessed its performance using multiple evaluation metrics.
+
+### Evaluation Metrics
+
+- Accuracy
 - Precision
 - Recall
 - F1 Score
 - ROC-AUC
-
-I experimented with class balancing and parameter tuning to improve the model's performance.
-
-**Big takeaway**
-
-A model isn't useful just because it has high accuracy. Understanding *why* it performs well (or poorly) is just as important.
+- Confusion Matrix
 
 ---
 
-### 4. Customer Segmentation
+# 📊 Model Performance
 
-After generating churn predictions, I grouped customers using K-Means clustering.
+| Metric | Result |
+|---------|-------:|
+| Baseline Random Forest Accuracy | **78.57%** |
+| Balanced Random Forest Accuracy | **79.21%** |
+| ROC-AUC Score | **0.858** |
 
-The segmentation revealed different customer profiles, including:
-
-- Long-term loyal customers
-- New customers with high churn risk
-- Customers paying higher monthly charges
-
-This was the part I enjoyed most because it transformed predictions into something a business could actually use.
+The balanced Random Forest model produced the best balance between identifying customers likely to churn while maintaining strong overall performance.
 
 ---
 
-## Tools Used
+# 🔬 Hyperparameter Experiments
+
+Instead of stopping after training a single model, I experimented with different values for **n_estimators** and **max_depth** to understand how they influenced model performance.
+
+| Trees | Max Depth | Accuracy | Recall | Precision | F1 Score |
+|------:|----------:|---------:|-------:|----------:|---------:|
+|100|5|0.746|0.820|0.534|0.647|
+|100|10|0.776|0.753|0.581|0.656|
+|100|15|0.803|0.630|0.660|0.645|
+|200|5|0.742|0.810|0.530|0.641|
+|200|10|0.782|0.745|0.592|0.660|
+|200|15|0.805|0.635|0.663|0.649|
+|300|5|0.744|0.820|0.532|0.645|
+|300|10|0.783|0.748|0.593|0.662|
+|300|15|**0.806**|0.640|**0.665**|0.652|
+|400|5|0.744|0.813|0.532|0.643|
+|400|10|0.783|0.748|0.593|0.662|
+|400|15|0.803|0.638|0.659|0.648|
+
+### Key Takeaways
+
+- Increasing tree depth improved **accuracy** and **precision**.
+- Shallower trees achieved the highest **recall**, making them better at identifying customers likely to churn.
+- Deeper trees produced a more balanced trade-off between precision and recall.
+- Comparing multiple configurations helped me understand how model parameters influence performance rather than relying on a single experiment.
+
+---
+
+#  Feature Importance
+
+Feature importance analysis helped identify the variables that contributed most to churn prediction.
+
+The most influential features included:
+
+- Contract Type
+- Customer Tenure
+- Monthly Charges
+- Total Charges
+- Technical Support
+
+This analysis made the model more interpretable by linking predictions back to real business drivers.
+
+---
+
+## 4. Customer Segmentation
+
+To complement churn prediction, I used **K-Means Clustering** to group customers based on their characteristics and predicted churn probability.
+
+### Features Used
+
+- Tenure
+- Monthly Charges
+- Total Charges
+- Predicted Churn Probability
+
+### Customer Segments
+
+| Segment | Description | Business Action |
+|----------|-------------|-----------------|
+| Loyal Customers | Long-tenure customers with low churn probability | Reward loyalty and promote premium services |
+| High-Risk Customers | New customers with higher churn probability | Target early retention campaigns |
+| Premium Customers | High-value customers with higher monthly spending | Focus on personalized engagement and retention |
+
+### What I Learned
+
+Customer segmentation transformed predictive outputs into actionable business insights by identifying different customer profiles that require different retention strategies.
+
+---
+
+# 🛠 Technologies Used
 
 - Python
 - Pandas
@@ -89,36 +210,63 @@ This was the part I enjoyed most because it transformed predictions into somethi
 
 ---
 
-## What This Project Taught Me
+# 💡 Skills Demonstrated
 
-This project gave me hands-on experience with much more than training a machine learning model.
-
-I learned how to:
-
-- Explore and understand unfamiliar datasets
-- Clean and preprocess real-world data
-- Build and evaluate classification models
-- Handle imbalanced data
-- Interpret feature importance
-- Apply clustering for customer segmentation
-- Connect technical results with business decisions
-
-More importantly, I learned that data science is not just about building models—it's about solving problems and communicating insights.
+- Exploratory Data Analysis (EDA)
+- Data Cleaning & Preprocessing
+- Feature Engineering
+- Random Forest Classification
+- Model Evaluation
+- Hyperparameter Tuning
+- Handling Class Imbalance
+- Feature Importance Analysis
+- ROC-AUC Evaluation
+- K-Means Clustering
+- Business Analytics
 
 ---
 
-## Future Improvements
+#  What This Project Taught Me
 
-If I continue working on this project, I'd like to:
+This project strengthened my understanding of the complete machine learning workflow—from exploring raw customer data to communicating business insights.
 
-- Compare Random Forest with XGBoost and LightGBM
-- Use SHAP values to explain predictions
-- Deploy the model with Streamlit
-- Build an interactive dashboard for business users
-- Test different clustering techniques
+Some of my key takeaways were:
+
+- Understanding customer behaviour before modeling leads to better analytical decisions.
+- Data preprocessing is just as important as model selection.
+- Evaluating multiple metrics provides a more complete picture of model performance than accuracy alone.
+- Experimenting with different model configurations helps reveal important trade-offs.
+- Customer segmentation complements prediction by making results easier to interpret from a business perspective.
+- Machine learning creates the most value when its outputs support real business decisions.
 
 ---
 
-## Final Thoughts
+#  Future Improvements
 
-This project represents one of my first complete machine learning workflows—from exploring raw data to building predictive models and generating business insights. Looking back, it helped me develop a much better understanding of both the technical and practical aspects of applied machine learning.
+Future enhancements for this project include:
+
+- Compare Random Forest with XGBoost, LightGBM, and CatBoost.
+- Use SHAP values for model explainability.
+- Deploy the model using Streamlit.
+- Build an interactive dashboard using Power BI or Tableau.
+- Automate hyperparameter optimization using GridSearchCV or Optuna.
+
+---
+
+# 📁 Repository Structure
+
+```text
+Customer-Churn-Prediction/
+│
+├── Customer_Segmentation.ipynb
+├── Telco_customer_churn.xlsx
+└── README.md
+```
+
+---
+
+#  Final Thoughts
+
+This project represents one of my first complete machine learning workflows—from understanding raw customer data to building predictive models and generating meaningful customer segments. Beyond improving model performance, it taught me the importance of experimentation, evaluation, and translating technical findings into business-focused recommendations.
+
+Overall, this project strengthened my skills in data analysis, machine learning, and problem-solving while giving me practical experience in applying predictive analytics to a real-world business problem.
